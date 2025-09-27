@@ -4,7 +4,13 @@ on:
     paths:
       - 'designs/**.md'
       - 'general-questions/**.md'
-
+  push:                       # ← run on pushes too (to main)
+    branches: [ main ]
+    paths:
+      - 'designs/**.md'
+      - 'general-questions/**.md'
+      - '.github/workflows/pr-checks.yml'
+  workflow_dispatch:          # ← add a manual “Run workflow” button
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -13,8 +19,8 @@ jobs:
       - name: Basic validation
         run: |
           set -e
-          base="${{ github.base_ref }}"
-          CHANGED=$(git diff --name-only origin/$base...HEAD | grep -E '^(designs|general-questions)/.*\.md$' || true)
+          base="${{ github.base_ref || 'main' }}"
+          CHANGED=$(git diff --name-only HEAD~1...HEAD | grep -E '^(designs|general-questions)/.*\.md$' || true)
           [ -z "$CHANGED" ] && echo "No new/changed files in designs/ or general-questions/." && exit 0
           echo "$CHANGED" | while read -r f; do
             b=$(basename "$f")
