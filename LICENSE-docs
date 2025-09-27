@@ -1,0 +1,10 @@
+cat > LICENSE-docs <<'EOF'
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+You are free to share and adapt the content (notes, designs, templates, images)
+as long as you give appropriate credit and indicate if changes were made.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+Summary:         https://creativecommons.org/licenses/by/4.0/
+Copyright (c) 2025 Abhinav Bellamkonda
+EOF
