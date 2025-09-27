@@ -1,0 +1,70 @@
+name: Title & filename guard
+on:
+  pull_request:
+    paths:
+      - 'designs/**.md'
+      - 'general-questions/**.md'
+  push:
+    branches: [ main ]
+    paths:
+      - 'designs/**.md'
+      - 'general-questions/**.md'
+      - '.github/workflows/title-guard.yml'
+  workflow_dispatch:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute changed files
+        id: changes
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+          fi
+          git diff --name-only "$base" "$head" > /tmp/changed.txt || true
+          grep -E '^(designs|general-questions)/.*\.md$' /tmp/changed.txt > /tmp/changed_filtered.txt || true
+          echo "filtered=$(tr '\n' ' ' < /tmp/changed_filtered.txt)" >> $GITHUB_OUTPUT
+      - name: Validate files & titles
+        run: |
+          set -e
+          CHANGED="${{ steps.changes.outputs.filtered }}"
+          if [ -z "$CHANGED" ]; then
+            echo "No relevant changes."
+            exit 0
+          fi
+          fail=0
+          known="networking-and-dns|caching-and-cdns|databases-and-storage|data-modeling-and-schema|consistency-and-cap-theorem|messaging-and-queues|microservices-and-service-mesh|scalability-and-performance|reliability-availability-and-dr|security-and-auth|miscellaneous"
+          for f in $CHANGED; do
+            echo "→ checking $f"
+            b=$(basename "$f")
+            # 1) filename must start with YYYY-MM-DD-
+            echo "$b" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}-' || { echo "❌ $f: filename must start with YYYY-MM-DD-"; fail=1; }
+            # 2) questions must live in a known topic folder
+            if echo "$f" | grep -q '^general-questions/'; then
+              echo "$f" | grep -Eq "^general-questions/($known)/" || { echo "❌ $f: put questions under a known topic folder"; fail=1; }
+            fi
+            # 3) require a top-level H1
+            if ! grep -qE '^# ' "$f"; then
+              echo "❌ $f: missing top-level '# ' title"; fail=1
+            else
+              H1=$(grep -m1 '^# ' "$f" | sed 's/^# //')
+              # gentle nudges (warnings)
+              [ ${#H1} -le 80 ] || echo "⚠️  $f: title > 80 chars (consider trimming)"
+              if echo "$f" | grep -q '^general-questions/'; then
+                echo "$H1" | grep -Eq '\?$' || echo "⚠️  $f: question titles should end with '?'"
+              fi
+              if echo "$f" | grep -q '^designs/'; then
+                echo "$H1" | grep -Eq '^Design:' || echo "⚠️  $f: consider 'Design: <system>' prefix"
+              fi
+            fi
+          done
+          exit $fail
