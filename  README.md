@@ -14,7 +14,8 @@ Start with a problem, ask relentlessly, surface unknowns early, and make trade-o
 |-- images/                          (diagrams)
 |-- templates/                       (templates)
 |   |-- DESIGN_TEMPLATE.md           (design template)
-|   `-- QUESTION_BANK.md             (question bank)
+|   `-- GENERAL_QUESTION_TEMPLATE.md (general question template)
+|   `-- QUESTION_BANK_TEMPLATE.md    (question bank)
 `-- general-questions/               (one file per question)
     |-- networking-and-dns/
     |-- caching-and-cdns/
