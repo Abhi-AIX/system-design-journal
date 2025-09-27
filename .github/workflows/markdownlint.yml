@@ -3,12 +3,16 @@ on:
   pull_request:
     paths:
       - '**/*.md'
+    paths-ignore:
+      - 'general-questions/miscellaneous/_tests/**'
   push:
     branches: [ main ]
     paths:
       - '**/*.md'
       - '.github/workflows/markdownlint.yml'
       - '.markdownlint.jsonc'
+    paths-ignore:
+      - 'general-questions/miscellaneous/_tests/**'
   workflow_dispatch:
 
 jobs:
