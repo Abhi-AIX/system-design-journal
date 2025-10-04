@@ -52,7 +52,7 @@ Start with a problem, ask relentlessly, surface unknowns early, and make trade-o
    ```
 
 3. **Use the Question Bank**  
-   Open `templates/QUESTION_BANK.md` and pick only the questions that fit your prompt.
+   Open `templates/QUESTION_BANK_TEMPLATE.md` and pick only the questions that fit your prompt.
 
 4. **Complete your design**  
    Fill the template sections (requirements, APIs, HLD, trade-offs).  

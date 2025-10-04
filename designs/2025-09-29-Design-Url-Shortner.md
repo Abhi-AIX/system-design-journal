@@ -1,4 +1,4 @@
-# <Problem Title> — YYYY-MM-DD
+# Design: URL Shortener
 
 > Follow Question-Driven Design (QDD): start with a problem prompt, then use the Question Bank to ask and answer.
 
