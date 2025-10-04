@@ -1,7 +1,7 @@
-# System Design Math – Cheat Sheet
+# System Design Math Cheat Sheet — 2025-10-01
 
 This is simple one-page cheat sheet to quickly estimate scale in system design interviews and real-world planning.  
-It covers **orders of magnitude, time units, storage, and networking.**  
+It covers **orders of magnitude, time units, storage, latency and networking.**  
 
 ---
 
@@ -74,4 +74,41 @@ It covers **orders of magnitude, time units, storage, and networking.**
 - 1 MB/s ≈ 8 Mbps  
 - LAN (data centers): ~1–10 Gbps  
 - WAN (Internet): 10 Mbps (slow) → 1 Gbps (fiber)  
-- Cloud NICs: 100 Mbps (small) → 10–100 Gbps (big)  
+- Cloud NICs: 100 Mbps (small) → 10–100 Gbps (big) 
+
+-- 
+
+## Latency Cheat Sheet (Beginner Friendly)
+
+> Think of "how long things take" in computing — from fastest (CPU) to slowest (internet).
+
+| **Action**                                 | **How Long It Takes**     | **Real-Life Comparison**                   |
+|--------------------------------------------|----------------------------|--------------------------------------------|
+| 🧠 L1 Cache Access                          | 0.5 nanoseconds (ns)       | Super fast — like thinking instantly       |
+| 🧠 L2 Cache Access                          | 7 ns                       | Still very fast                            |
+| 🔐 Lock/Unlock a Thread (Mutex)            | 25 ns                      | Tiny pause — like blinking                 |
+| 📦 Access RAM (Memory)                     | 100 ns                     | Like walking across your room              |
+| 🗜 Compress 1KB of Data (Zippy)             | 10,000 ns = 10 µs          | Quick sneeze                               |
+| 🌐 Send 1KB over 1 Gbps Network            | 10 µs                      | Short email send in same building          |
+| 💾 Read 4KB Randomly from SSD              | 150 µs                     | Flip a page in a book                      |
+| 🧠 Read 1MB from Memory                    | 250 µs                     | Grab a document from your desk             |
+| 🏢 Roundtrip Inside Same Data Center       | 500 µs                     | Walk down the hall and back                |
+| 💾 Read 1MB from SSD (Sequentially)        | 1 ms                       | Open a drawer                              |
+| 💿 Seek Data from HDD (Hard Drive)         | 10 ms                      | Open a filing cabinet                      |
+| 🌍 Download 1MB over the Internet (1 Gbps) | 10 ms                      | Grab a photo from cloud storage            |
+| 💿 Read 1MB from HDD                       | 30 ms                      | Read a full book page                      |
+| ✈️ Round Trip: USA ↔ Europe (Internet)     | 150 ms                     | Send and get a message across oceans       |
+
+---
+
+## 🧠 Simple Rules of Thumb
+
+| **Thing**                  | **Takes About**     | **Notes**                                 |
+|----------------------------|---------------------|-------------------------------------------|
+| CPU stuff (cache)          | < 1 µs              | Extremely fast                            |
+| RAM access                 | ~0.1 µs             | Still very fast                           |
+| In-memory cache (Redis)    | ~0.1 – 1 ms         | Very fast for user data                   |
+| Indexed DB lookup          | ~1 – 20 ms          | Fast if using index                       |
+| Unindexed DB scan          | ~50 – 200 ms        | Slow; reads entire table                  |
+| Cross-region API request   | ~100 – 200 ms       | Feels like a pause to users               |
+| HDD read or long network   | 10 – 150 ms         | Noticeably slow                           |

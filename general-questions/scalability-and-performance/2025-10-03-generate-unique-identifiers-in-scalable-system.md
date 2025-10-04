@@ -47,6 +47,7 @@ Separate uniqueness from shortness.
 Pros
 - Guaranteed unique (no collisions)
 - Excellent performance for many systems
+  
 Cons
 - Sequential/predictable IDs
 - Requires a way to scale or shard the counter for very large systems
@@ -80,6 +81,7 @@ Online request handling:
 Pros
 - Best write performance for request time
 - Non-sequential, non-predictable keys
+  
 Cons
 - Higher system complexity
 - Need storage for used keys and the pool
